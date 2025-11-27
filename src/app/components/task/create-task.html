@@ -1,0 +1,40 @@
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+  <!-- Title -->
+  <label for="title">Title</label>
+  <input id="title" type="text" formControlName="title" />
+  <div class="error" *ngIf="taskForm.get('title')?.touched && taskForm.get('title')?.invalid">
+    Title is required and must be under 200 characters.
+  </div>
+
+  <!-- Description -->
+  <label for="description">Description (optional)</label>
+  <textarea id="description" rows="4" formControlName="description"></textarea>
+
+  <!-- Status -->
+  <label for="status">Status</label>
+  <select id="status" formControlName="status">
+    <option *ngFor="let s of statuses" [value]="s.value">{{ s.label }}</option>
+  </select>
+
+  <!-- Due Date/Time -->
+  <label for="due">Due date/time</label>
+  <input id="due" type="datetime-local" formControlName="dueDateTime" />
+  <div class="error" *ngIf="taskForm.get('dueDateTime')?.touched && taskForm.get('dueDateTime')?.errors">
+    <div *ngIf="taskForm.get('dueDateTime')?.errors?.['required']">Due date/time is required.</div>
+    <div *ngIf="taskForm.get('dueDateTime')?.errors?.['notFuture']">Due date/time must be in the future.</div>
+  </div>
+
+  <!-- Submit button -->
+  <button type="submit">Create Task</button>
+</form>
+
+<!-- Server error -->
+<div class="error" *ngIf="serverError">
+  {{ serverError }}
+</div>
+
+<!-- Success message -->
+<div class="success-box" *ngIf="createdTask">
+  <strong>Task created successfully!</strong>
+  <pre>{{ createdTask | json }}</pre>
+</div>
