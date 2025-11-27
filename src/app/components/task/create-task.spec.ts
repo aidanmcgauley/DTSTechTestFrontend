@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
+import { vi } from 'vitest';
 import { TaskService } from '../../services/task.service';
 import { CreateTaskComponent } from './create-task';
 
@@ -10,11 +11,13 @@ describe('CreateTaskComponent', () => {
   let mockTaskService: any;
 
   beforeEach(async () => {
-    mockTaskService = { createTask: jest.fn().mockReturnValue(of({ id: 1 })) };
+    mockTaskService = { createTask: vi.fn().mockReturnValue(of({ id: 1 })) };
 
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [CreateTaskComponent],
+      imports: [
+        ReactiveFormsModule,
+        CreateTaskComponent // <-- FIX: import standalone component here
+      ],
       providers: [{ provide: TaskService, useValue: mockTaskService }]
     }).compileComponents();
 
